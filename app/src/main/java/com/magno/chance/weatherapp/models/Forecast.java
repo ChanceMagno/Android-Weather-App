@@ -1,4 +1,4 @@
-
+package com.magno.chance.weatherapp.models;
 
 public class Forecast {
     private String mCityName;
@@ -17,8 +17,7 @@ public class Forecast {
             String mIcon,
             String mCurrentTemp,
             String mMaxTemp,
-            String mMinTemp,
-            String mCloudPercentage) {
+            String mMinTemp) {
 
         this.mCityName = mCityName;
         this.mHumidity = mHumidity;
@@ -27,7 +26,6 @@ public class Forecast {
         this.mCurrentTemp = mCurrentTemp;
         this.mMaxTemp = mMaxTemp;
         this.mMinTemp = mMinTemp;
-        this.mCloudPercentage = mCloudPercentage;
     }
 
     public String getCityName() {
@@ -58,8 +56,5 @@ public class Forecast {
         return mMinTemp;
     }
 
-    public String getCloudPercentage() {
-        return mCloudPercentage;
-    }
 }
 

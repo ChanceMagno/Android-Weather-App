@@ -20,10 +20,12 @@ import okhttp3.Response;
 
 public class weatherApiService {
 
-    public static void getWeather (String location, Callback callback) {
+    public static void getWeather (String location, String location2, Callback callback) {
         OkHttpClient client = new OkHttpClient.Builder().build();
         HttpUrl.Builder urlBuilder = HttpUrl.parse(Constants.API_BASE_URL).newBuilder();
-        urlBuilder.addQueryParameter(Constants.YOUR_QUERY_PARAMETER, location);
+        urlBuilder.addQueryParameter("lat", location);
+        urlBuilder.addQueryParameter("lon", location2);
+        urlBuilder.addQueryParameter(Constants.API_UNITS, Constants.API_UNITS_FORMAT);
         urlBuilder.addQueryParameter(Constants.API_KEY_QUERY_PARAMETER, Constants.API_KEY);
         String url = urlBuilder.build().toString();
         Log.d("url", url);

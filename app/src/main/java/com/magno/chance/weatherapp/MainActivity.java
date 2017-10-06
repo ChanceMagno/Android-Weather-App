@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             if (location != null) {
                                 double lat = location.getLatitude();
                                 double lng = location.getLongitude();
-                                getForecast(String.valueOf(lat), String.valueOf(lng));
+                                getLocalForecast(String.valueOf(lat), String.valueOf(lng));
                             } else {
                                 showToast("Unable to retrieve current location");
                             }
@@ -117,8 +117,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void getForecast(String lat, String lon){
-        weatherApiService.getWeather(lat, lon, new Callback() {
+    public void getLocalForecast(String lat, String lon){
+        weatherApiService.getForecastFromCoords(lat, lon, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();

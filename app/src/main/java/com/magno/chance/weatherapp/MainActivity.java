@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (requestCode) {
             case PERMISSION_ACCESS_COARSE_LOCATION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getForecastWithCoords();
+                    getCoordinates();
                 } else {
                     showToast("please enable location services");
                 }
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void getForecastWithCoords(){
+    public void getCoordinates(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
                             if (location != null) {
                                 double lat = location.getLatitude();
                                 double lng = location.getLongitude();
@@ -115,6 +114,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     });
         }
+    }
+
+    public void getForecastWithZip(String zipcode){
+        weatherApiService.getForecastFromZip(zipcode, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                mDayForecast = weatherApiService.processResults(response);
+                MainActivity.this.runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        showToast(mDayForecast.get(0).getMaxTemp());
+                    }
+                });
+            }
+        });
     }
 
     public void getLocalForecast(String lat, String lon){
@@ -142,9 +162,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        if(checkLocationPerm()){
-            getForecastWithCoords();
-        }
+        getForecastWithZip("98664");
+//        if(checkLocationPerm()){
+//            getCoordinates();
+//        }
     }
 
 

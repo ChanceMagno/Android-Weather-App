@@ -27,7 +27,6 @@ public class weatherApiService {
         urlBuilder.addQueryParameter(Constants.API_UNITS, Constants.API_UNITS_FORMAT);
         urlBuilder.addQueryParameter(Constants.API_KEY_QUERY_PARAMETER, Constants.API_KEY);
         String url = urlBuilder.build().toString();
-        Log.i("url", url);
         Request request= new Request.Builder()
                 .url(url)
                 .build();

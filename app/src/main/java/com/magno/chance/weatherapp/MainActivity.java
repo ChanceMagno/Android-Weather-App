@@ -9,7 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -33,6 +35,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private GoogleApiClient googleApiClient;
     private static final int PERMISSION_ACCESS_COARSE_LOCATION = 1;
     public ArrayList<Forecast> mDayForecast;
+    private ListView mListView;
+    private String[] savedZipCodes = new String[] {};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         mButton = findViewById(R.id.button);
         mButton.setOnClickListener(this);
+        mListView = findViewById(R.id.listView);
+
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, savedZipCodes);
+        mListView.setAdapter(adapter);
+
         googleApiClient = new GoogleApiClient.Builder(this, this, this).addApi(LocationServices.API).build();
 
     }
@@ -162,10 +172,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        getForecastWithZip("98664");
-//        if(checkLocationPerm()){
-//            getCoordinates();
-//        }
+        if(checkLocationPerm()){
+            getCoordinates();
+        }
     }
 
 

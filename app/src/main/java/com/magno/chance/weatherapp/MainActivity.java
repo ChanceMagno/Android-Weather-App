@@ -7,12 +7,18 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import android.widget.SearchView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -53,6 +59,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         googleApiClient = new GoogleApiClient.Builder(this, this, this).addApi(LocationServices.API).build();
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_search, menu);
+        MenuItem item = menu.findItem(R.id.menuSearch);
+        SearchView searchView = (SearchView)item.getActionView();
+        searchView.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                getForecastWithZip(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
 
     public boolean checkLocationPerm(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -126,24 +156,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void getForecastWithZip(String zipcode){
+    public void getForecastWithZip(final String zipcode){
         weatherApiService.getForecastFromZip(zipcode, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                    showToast(call.toString());
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, final Response response) throws IOException {
+
                 mDayForecast = weatherApiService.processResults(response);
                 MainActivity.this.runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
-                        showToast(mDayForecast.get(0).getMaxTemp());
+                        if(response.code() == 200){
+                            showToast(mDayForecast.get(0).getMaxTemp());
+                        } else {
+                            showToast(String.valueOf("Please be sure you entered a valid zipcode. Error code: " +response.code()));
+                        }
                     }
                 });
+
             }
+
         });
     }
 

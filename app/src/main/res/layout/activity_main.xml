@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.magno.chance.weatherapp.MainActivity">
 
-
-
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
@@ -38,4 +36,9 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
+
+
+
 </android.support.constraint.ConstraintLayout>
+
+

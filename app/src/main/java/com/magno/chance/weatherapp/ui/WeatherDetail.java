@@ -26,17 +26,20 @@ public class WeatherDetail extends AppCompatActivity {
     private SharedPreferences.Editor mEditor;
 
     @BindView(R.id.cityNameTextView) TextView mCityNameTextView;
-    @BindView(R.id.descriptionTextView) TextView mDescriptionTextView;
     @BindView(R.id.iconImageView) ImageView mIconImageView;
-
+    @BindView(R.id.currentTempTextView) TextView mCurrentTempTextView;
+    @BindView(R.id.pressureTextView) TextView mPressureTextView;
+    @BindView(R.id.humidityTextView5) TextView mHumidityTextView;
+    @BindView(R.id.descriptionsTextView) TextView mDescriptionTextView;
+    @BindView(R.id.lowTempTextView) TextView mLowTempTextView;
+    @BindView(R.id.highTempTextView) TextView mHighTempTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather_detail);
+
         ButterKnife.bind(this);
-
-
 
         mForecast = Parcels.unwrap(getIntent().getParcelableExtra("forecast"));
 
@@ -48,10 +51,17 @@ public class WeatherDetail extends AppCompatActivity {
 
     public void setPageContent(){
 
-        mCityNameTextView.setText(mForecast.getCityName());
+        mCurrentTempTextView.setText((mForecast.getCurrentTemp() + (char) 0x00B0));
         mDescriptionTextView.setText(mForecast.getDescription());
+        mCityNameTextView.setText(mForecast.getCityName());
+        mHumidityTextView.setText(mForecast.getHumidity());
+        mPressureTextView.setText(mForecast.getPressure());
+        mHighTempTextView.setText(mForecast.getMaxTemp() + (char) 0x00B0);
+        mLowTempTextView.setText(mForecast.getMinTemp() + (char) 0x00B0);
         Picasso.with(this).load(getIcon(mForecast.getIcon())).into(mIconImageView);
     }
+
+
 
     public String getIcon(String icon){
         if(icon.contains("01")){

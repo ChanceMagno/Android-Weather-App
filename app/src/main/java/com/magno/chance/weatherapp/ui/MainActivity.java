@@ -1,6 +1,7 @@
-package com.magno.chance.weatherapp;
+package com.magno.chance.weatherapp.ui;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
@@ -25,8 +26,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.magno.chance.weatherapp.R;
 import com.magno.chance.weatherapp.models.Forecast;
 import com.magno.chance.weatherapp.service.weatherApiService;
+
+import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int PERMISSION_ACCESS_COARSE_LOCATION = 1;
     public ArrayList<Forecast> mDayForecast;
     private ListView mListView;
-    private String[] savedZipCodes = new String[] {};
+    private String[] savedZipCodes = new String[] {"vancouve", "portland", "spaine", "bloomington"};
 
 
     @Override
@@ -59,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         googleApiClient = new GoogleApiClient.Builder(this, this, this).addApi(LocationServices.API).build();
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -83,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onCreateOptionsMenu(menu);
     }
 
-
     public boolean checkLocationPerm(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -100,8 +104,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         }
     }
-
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -141,18 +143,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 == PackageManager.PERMISSION_GRANTED) {
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
             mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                double lat = location.getLatitude();
-                                double lng = location.getLongitude();
-                                getLocalForecast(String.valueOf(lat), String.valueOf(lng));
-                            } else {
-                                showToast("Unable to retrieve current location");
-                            }
-                        }
-                    });
+            .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        double lat = location.getLatitude();
+                        double lng = location.getLongitude();
+                        getLocalForecast(String.valueOf(lat), String.valueOf(lng));
+                    } else {
+                        showToast("Unable to retrieve current location");
+                    }
+                }
+            });
         }
     }
 
@@ -172,9 +174,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         if(response.code() == 200){
-                            showToast(mDayForecast.get(0).getMaxTemp());
+                            Intent intent = new Intent(MainActivity.this, WeatherDetail.class);
+                            intent.putExtra("restaurants", Parcels.wrap(mDayForecast.get(0)));
+                            startActivity(intent);
+                            Log.i("forecast", String.valueOf(mDayForecast));
                         } else {
-                            showToast(String.valueOf("Please be sure you entered a valid zipcode. Error code: " +response.code()));
+                            showToast("Unable to retrieve forecast for " + zipcode);
                         }
                     }
                 });

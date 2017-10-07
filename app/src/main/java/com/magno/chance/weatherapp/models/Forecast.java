@@ -1,5 +1,8 @@
 package com.magno.chance.weatherapp.models;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class Forecast {
     private String mCityName;
     private String mHumidity;
@@ -8,7 +11,8 @@ public class Forecast {
     private String mCurrentTemp;
     private String mMaxTemp;
     private String mMinTemp;
-    private String mCloudPercentage;
+
+    public Forecast() {};
 
     public Forecast(
             String mCityName,

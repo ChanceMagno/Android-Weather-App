@@ -1,7 +1,6 @@
 package com.magno.chance.weatherapp.service;
 
 
-import android.util.Log;
 
 
 import com.magno.chance.weatherapp.Constants;
@@ -11,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -19,6 +19,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class weatherApiService {
+
 
     public static void getForecastFromZip(String location, Callback callback) {
         OkHttpClient client = new OkHttpClient.Builder().build();

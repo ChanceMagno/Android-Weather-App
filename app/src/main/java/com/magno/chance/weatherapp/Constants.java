@@ -15,4 +15,15 @@ public class Constants {
     public static final String API_BASE_ICON_URL = "http://openweathermap.org/img/w/";
 
     public static final ArrayList<String> PREFERENCES_LOCATION_KEY = null;
+
+    public static final String  WEATHER_PNG_THUNDER = "://publicdomainvectors.org/photos/yves_guillou_orage.png";
+    public static final String  WEATHER_PNG_CLEAR_SKY = "https://publicdomainvectors.org/photos/Anonymous_simple_weather_symbols_1.png";
+    public static final String  WEATHER_PNG_SHOWERS_RAIN = "https://publicdomainvectors.org/photos/Anonymous_simple_weather_symbols_6.png";
+    public static final String  WEATHER_PNG_RAIN = "https://publicdomainvectors.org/photos/Anonymous_simple_weather_symbols_7.png";
+    public static final String  WEATHER_PNG_MIST = "https://publicdomainvectors.org/photos/Anonymous_simple_weather_symbols_14.png";
+    public static final String  WEATHER_PNG_SNOW = "https://publicdomainvectors.org/photos/Anonymous_simple_weather_symbols_12.png";
+    public static final String  WEATHER_PNG_SCATTERED_CLOUDS = "https://publicdomainvectors.org/photos/Anonymous_simple_weather_symbols_4.png";
+    public static final String  WEATHER_PNG_FEW_CLOUDS = "https://publicdomainvectors.org/photos/Anonymous_simple_weather_symbols_3.png";
+    public static final String  WEATHER_PNG_BROKEN_CLOUDS = "https://publicdomainvectors.org/photos/Anonymous_simple_weather_symbols_2.png";
+    public static final String  WEATHER_UNKNOWN = "https://publicdomainvectors.org/photos/weather_icons_-_fg.jpg";
 }

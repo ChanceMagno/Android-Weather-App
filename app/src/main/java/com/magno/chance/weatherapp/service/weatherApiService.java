@@ -68,7 +68,6 @@ public class weatherApiService {
                 String maxTemp = dayObject.getJSONObject("main").getString("temp_max");
                 String description = dayObject.getJSONArray("weather").getJSONObject(0).getString("description");
 
-
                 Forecast dayForecast = new Forecast(cityName, humidity, pressure, icon, currentTemp, maxTemp, minTemp, description);
                 dayForecasts.add(dayForecast);
             }

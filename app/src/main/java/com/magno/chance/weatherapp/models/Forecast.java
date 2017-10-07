@@ -11,6 +11,7 @@ public class Forecast {
     private String mCurrentTemp;
     private String mMaxTemp;
     private String mMinTemp;
+    private String mDescription;
 
     public Forecast() {};
 
@@ -21,7 +22,8 @@ public class Forecast {
             String mIcon,
             String mCurrentTemp,
             String mMaxTemp,
-            String mMinTemp) {
+            String mMinTemp,
+            String mDescription) {
 
         this.mCityName = mCityName;
         this.mHumidity = mHumidity;
@@ -30,6 +32,7 @@ public class Forecast {
         this.mCurrentTemp = mCurrentTemp;
         this.mMaxTemp = mMaxTemp;
         this.mMinTemp = mMinTemp;
+        this.mDescription = mDescription;
     }
 
     public String getCityName() {
@@ -59,6 +62,8 @@ public class Forecast {
     public String getMinTemp() {
         return mMinTemp;
     }
+
+    public String getDescription(){ return mDescription; }
 
 }
 

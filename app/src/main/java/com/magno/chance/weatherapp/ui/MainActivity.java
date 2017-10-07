@@ -175,9 +175,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void run() {
                         if(response.code() == 200){
                             Intent intent = new Intent(MainActivity.this, WeatherDetail.class);
-                            intent.putExtra("restaurants", Parcels.wrap(mDayForecast.get(0)));
+                            intent.putExtra("forecast", Parcels.wrap(mDayForecast.get(0)));
                             startActivity(intent);
-                            Log.i("forecast", String.valueOf(mDayForecast));
                         } else {
                             showToast("Unable to retrieve forecast for " + zipcode);
                         }
@@ -203,8 +202,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 MainActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showToast(mDayForecast.get(0).getMaxTemp());
-                    }
+                        Intent intent = new Intent(MainActivity.this, WeatherDetail.class);
+                        intent.putExtra("forecast", Parcels.wrap(mDayForecast.get(0)));
+                        startActivity(intent);                    }
                 });
 
             }

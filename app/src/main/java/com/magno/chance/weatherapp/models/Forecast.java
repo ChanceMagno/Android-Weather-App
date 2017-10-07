@@ -4,6 +4,7 @@ import org.parceler.Parcel;
 
 @Parcel
 public class Forecast {
+    private String mCityID;
     private String mCityName;
     private String mHumidity;
     private String mPressure;
@@ -23,7 +24,8 @@ public class Forecast {
             String mCurrentTemp,
             String mMaxTemp,
             String mMinTemp,
-            String mDescription) {
+            String mDescription,
+            String mCityID) {
 
         this.mCityName = mCityName;
         this.mHumidity = mHumidity;
@@ -33,6 +35,7 @@ public class Forecast {
         this.mMaxTemp = mMaxTemp;
         this.mMinTemp = mMinTemp;
         this.mDescription = mDescription;
+        this.mCityID = mCityID;
     }
 
     public String getCityName() {
@@ -64,6 +67,8 @@ public class Forecast {
     }
 
     public String getDescription(){ return mDescription; }
+
+    public String getCityID(){ return mCityID; }
 
 }
 

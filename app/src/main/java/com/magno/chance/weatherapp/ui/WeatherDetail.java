@@ -1,10 +1,8 @@
 package com.magno.chance.weatherapp.ui;
 
-import android.content.SharedPreferences;
-import android.support.annotation.BinderThread;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,16 +12,12 @@ import com.magno.chance.weatherapp.models.Forecast;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
-import org.w3c.dom.Text;
 
-import butterknife.BindBitmap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class WeatherDetail extends AppCompatActivity {
     private Forecast mForecast;
-    private SharedPreferences mSharedPreferences;
-    private SharedPreferences.Editor mEditor;
 
     @BindView(R.id.cityNameTextView) TextView mCityNameTextView;
     @BindView(R.id.iconImageView) ImageView mIconImageView;
@@ -44,13 +38,11 @@ public class WeatherDetail extends AppCompatActivity {
         mForecast = Parcels.unwrap(getIntent().getParcelableExtra("forecast"));
 
         setPageContent();
-
     }
 
 
 
     public void setPageContent(){
-
         mCurrentTempTextView.setText((mForecast.getCurrentTemp() + (char) 0x00B0));
         mDescriptionTextView.setText(mForecast.getDescription());
         mCityNameTextView.setText(mForecast.getCityName());

@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.magno.chance.weatherapp.Constants;
 import com.magno.chance.weatherapp.R;
 import com.magno.chance.weatherapp.models.Forecast;
 import com.magno.chance.weatherapp.service.weatherApiService;
@@ -37,6 +38,8 @@ import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 
 import butterknife.BindView;
 import okhttp3.Call;
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         mButton = findViewById(R.id.button);
         mButton.setOnClickListener(this);
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("weather").child("zipcodes");
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference(Constants.DATABASE_REF_WEATHER).child(Constants.DATABASE_REF_CITYCODES);
         googleApiClient = new GoogleApiClient.Builder(this, this, this).addApi(LocationServices.API).build();
         getSavedCityCodes();
     }
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    cityCodes = dataSnapshot.getValue(ArrayList.class);
+                    cityCodes = (ArrayList<String>) dataSnapshot.getValue();
                     getSavedForecasts(cityCodes);
                 }
             }
@@ -82,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -225,9 +227,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         @Override
                         public void run() {
-
+                            // TODO: 10/8/17 setup recycler view
                         }
                     });
+
                 }
             }
         });

@@ -24,4 +24,7 @@ public class Constants {
     public static final String  WEATHER_PNG_FEW_CLOUDS = "https://publicdomainvectors.org/photos/Anonymous_simple_weather_symbols_3.png";
     public static final String  WEATHER_PNG_BROKEN_CLOUDS = "https://publicdomainvectors.org/photos/Anonymous_simple_weather_symbols_2.png";
     public static final String  WEATHER_UNKNOWN = "https://publicdomainvectors.org/photos/weather_icons_-_fg.jpg";
+
+    public static final String DATABASE_REF_WEATHER = "weather";
+    public static final String DATABASE_REF_CITYCODES = "cityCodes";
 }

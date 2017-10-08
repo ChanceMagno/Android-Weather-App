@@ -2,8 +2,10 @@ package com.magno.chance.weatherapp.ui;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -14,9 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import android.widget.SearchView;
@@ -44,10 +44,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton;
     private FusedLocationProviderClient mFusedLocationClient;
     private GoogleApiClient googleApiClient;
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mEditor;
     private static final int PERMISSION_ACCESS_COARSE_LOCATION = 1;
     public ArrayList<Forecast> mDayForecast;
-    private ListView mListView;
-    private String[] savedZipCodes = new String[] {"vancouve", "portland", "spaine", "bloomington"};
 
 
     @Override
@@ -56,15 +56,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         mButton = findViewById(R.id.button);
         mButton.setOnClickListener(this);
-        mListView = findViewById(R.id.listView);
-
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, savedZipCodes);
-        mListView.setAdapter(adapter);
-
         googleApiClient = new GoogleApiClient.Builder(this, this, this).addApi(LocationServices.API).build();
 
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mEditor = mSharedPreferences.edit();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -88,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
         return super.onCreateOptionsMenu(menu);
     }
+
+
 
     public boolean checkLocationPerm(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -186,6 +184,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
 
+        });
+    }
+
+    public void getSavedForecasts(ArrayList<String> savedForcast){
+        weatherApiService.getSavedForecasts(savedForcast, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                    showToast("Failed to retrieve forcast(s)");
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                mDayForecast = weatherApiService.processListResults(response); {
+                    MainActivity.this.runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+
+                        }
+                    });
+                }
+            }
         });
     }
 

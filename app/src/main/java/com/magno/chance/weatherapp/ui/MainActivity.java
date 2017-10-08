@@ -8,6 +8,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -31,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.magno.chance.weatherapp.Constants;
 import com.magno.chance.weatherapp.R;
+import com.magno.chance.weatherapp.adapters.WeatherListAdapter;
 import com.magno.chance.weatherapp.models.Forecast;
 import com.magno.chance.weatherapp.service.weatherApiService;
 
@@ -42,6 +45,7 @@ import java.util.Arrays;
 
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -55,6 +59,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<String> cityCodes = new ArrayList<String>();
     private DatabaseReference mDatabaseRef;
     private ValueEventListener mListener;
+    private WeatherListAdapter mAdapter;
+
+    @BindView(R.id.mainRecyclerView) RecyclerView mRecyclerView;
+
+
 
 
 
@@ -62,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         mButton = findViewById(R.id.button);
         mButton.setOnClickListener(this);
         mDatabaseRef = FirebaseDatabase.getInstance().getReference(Constants.DATABASE_REF_WEATHER).child(Constants.DATABASE_REF_CITYCODES);
@@ -227,8 +237,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         @Override
                         public void run() {
-                            // TODO: 10/8/17 setup recycler view
-                        }
+                            mAdapter = new WeatherListAdapter(getApplicationContext(), mDayForecast);
+                            mRecyclerView.setAdapter(mAdapter);
+                            RecyclerView.LayoutManager layoutManager =
+                                    new LinearLayoutManager(MainActivity.this);
+                            mRecyclerView.setLayoutManager(layoutManager);
+                            mRecyclerView.setHasFixedSize(true);                        }
                     });
 
                 }

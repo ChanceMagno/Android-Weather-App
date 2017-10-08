@@ -2,10 +2,8 @@ package com.magno.chance.weatherapp.ui;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +24,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.magno.chance.weatherapp.R;
 import com.magno.chance.weatherapp.models.Forecast;
 import com.magno.chance.weatherapp.service.weatherApiService;
@@ -45,7 +45,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FusedLocationProviderClient mFusedLocationClient;
     private GoogleApiClient googleApiClient;
     private static final int PERMISSION_ACCESS_COARSE_LOCATION = 1;
-    public ArrayList<Forecast> mDayForecast;
+    private ArrayList<Forecast> mDayForecast;
+    private DatabaseReference mDatabaseRef;
+
 
 
     @Override
@@ -169,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         if(response.code() == 200){
+
                             Intent intent = new Intent(MainActivity.this, WeatherDetail.class);
                             intent.putExtra("forecast", Parcels.wrap(mDayForecast.get(0)));
                             startActivity(intent);

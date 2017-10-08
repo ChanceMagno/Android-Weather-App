@@ -1,7 +1,6 @@
 package com.magno.chance.weatherapp;
 
 
-import java.util.ArrayList;
 
 public class Constants {
     public static final String API_Multi_FORECAST_URL = "http://api.openweathermap.org/data/2.5/group?";
@@ -14,8 +13,6 @@ public class Constants {
     public static final String API_UNITS_FORMAT = "imperial";
     public static final String API_LAT_QUERY_PARAMETER = "lat";
     public static final String API_LON_QUERY_PARAMETER = "lon";
-
-    public static final ArrayList<String> PREFERENCES_LOCATION_KEY = null;
 
     public static final String  WEATHER_PNG_THUNDER = "://publicdomainvectors.org/photos/yves_guillou_orage.png";
     public static final String  WEATHER_PNG_CLEAR_SKY = "https://publicdomainvectors.org/photos/Anonymous_simple_weather_symbols_1.png";

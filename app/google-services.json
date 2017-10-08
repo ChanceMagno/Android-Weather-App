@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "713946927421",
+    "firebase_url": "https://blog-js-420d8.firebaseio.com",
+    "project_id": "blog-js-420d8",
+    "storage_bucket": "blog-js-420d8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:713946927421:android:d31db940c3adefc9",
+        "android_client_info": {
+          "package_name": "com.magno.chance.weatherapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "713946927421-pj2anq3al0rq4ejto4qsbuvnqm75s860.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.magno.chance.weatherapp",
+            "certificate_hash": "c3926a62be0bd5f8614f9542f41c89e4ffdeb3b1"
+          }
+        },
+        {
+          "client_id": "713946927421-vkslnhk2og2b1s8afc73efuebbu9eocu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWej2dwTvEdUMgrou17GqHfXe2f0n0kKA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "713946927421-vkslnhk2og2b1s8afc73efuebbu9eocu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

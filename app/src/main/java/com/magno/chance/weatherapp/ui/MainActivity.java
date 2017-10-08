@@ -24,8 +24,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.magno.chance.weatherapp.R;
 import com.magno.chance.weatherapp.models.Forecast;
 import com.magno.chance.weatherapp.service.weatherApiService;
@@ -46,7 +49,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private GoogleApiClient googleApiClient;
     private static final int PERMISSION_ACCESS_COARSE_LOCATION = 1;
     private ArrayList<Forecast> mDayForecast;
+    private ArrayList<String> cityCodes = new ArrayList<String>();
     private DatabaseReference mDatabaseRef;
+    private ValueEventListener mListener;
 
 
 
@@ -56,9 +61,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         mButton = findViewById(R.id.button);
         mButton.setOnClickListener(this);
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("weather").child("zipcodes");
         googleApiClient = new GoogleApiClient.Builder(this, this, this).addApi(LocationServices.API).build();
-
+        getSavedCityCodes();
     }
+
+    public void getSavedCityCodes(){
+        mDatabaseRef.addListenerForSingleValueEvent(mListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    cityCodes = dataSnapshot.getValue(ArrayList.class);
+                    getSavedForecasts(cityCodes);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -171,7 +195,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         if(response.code() == 200){
-
+                            cityCodes.add(mDayForecast.get(0).getCityID());
+                            mDatabaseRef.setValue(cityCodes);
                             Intent intent = new Intent(MainActivity.this, WeatherDetail.class);
                             intent.putExtra("forecast", Parcels.wrap(mDayForecast.get(0)));
                             startActivity(intent);
@@ -216,15 +241,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, final Response response) throws IOException {
                 mDayForecast = weatherApiService.processResults(response);
 
                 MainActivity.this.runOnUiThread(new Runnable() {
+
                     @Override
                     public void run() {
-                        Intent intent = new Intent(MainActivity.this, WeatherDetail.class);
-                        intent.putExtra("forecast", Parcels.wrap(mDayForecast.get(0)));
-                        startActivity(intent);                    }
+                        if(response.code() == 200){
+                            cityCodes.add(mDayForecast.get(0).getCityID());
+                            mDatabaseRef.setValue(cityCodes);
+                            Intent intent = new Intent(MainActivity.this, WeatherDetail.class);
+                            intent.putExtra("forecast", Parcels.wrap(mDayForecast.get(0)));
+                            startActivity(intent);
+                        } else {
+                            showToast("Unable to retrieve forecast for your current location");
+                        }
+                    }
                 });
 
             }
@@ -252,6 +285,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStop() {
         if(googleApiClient != null){
             googleApiClient.disconnect();
+        }
+        if(mListener != null){
+            mDatabaseRef.removeEventListener(mListener);
         }
         super.onStop();
     }

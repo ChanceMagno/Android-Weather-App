@@ -3,13 +3,17 @@ package com.magno.chance.weatherapp.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.magno.chance.weatherapp.Constants;
 import com.magno.chance.weatherapp.R;
 import com.magno.chance.weatherapp.models.Forecast;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -44,7 +48,9 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
     }
 
     public class WeatherViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.textView) TextView mNameTextView;
+        @BindView(R.id.currentTempTextView) TextView mCurrentTempTextView;
+        @BindView(R.id.nameTextView) TextView mCityNameTextView;
+        @BindView(R.id.iconImageView) ImageView mIconImageView;
         private Context mContext;
 
         public WeatherViewHolder(View itemView) {
@@ -54,7 +60,11 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
         }
 
         public void bindForecasts(Forecast forecast) {
-            mNameTextView.setText(forecast.getDescription());;
+            String iconUrl = Constants.WEATHER_ICON_BASE_URL + forecast.getIcon() + ".png";
+            String currentTemp = (forecast.getCurrentTemp() + (char) 0x00B0);
+            mCityNameTextView.setText(forecast.getCityName());
+            mCurrentTempTextView.setText(currentTemp);
+            Picasso.with(mContext).load(iconUrl).into(mIconImageView);
         }
     }
 

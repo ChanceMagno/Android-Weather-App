@@ -13,7 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -62,6 +61,7 @@ public class weatherApiService {
         urlBuilder.addQueryParameter(Constants.API_UNITS, Constants.API_UNITS_FORMAT);
         urlBuilder.addQueryParameter(Constants.API_KEY_QUERY_PARAMETER, Constants.API_KEY);
         String url = urlBuilder.build().toString();
+
         Request request= new Request.Builder()
                 .url(url)
                 .build();
@@ -87,12 +87,13 @@ public class weatherApiService {
                     String minTemp = dayObject.getJSONObject("main").getString("temp_min");
                     String maxTemp = dayObject.getJSONObject("main").getString("temp_max");
                     String description = dayObject.getJSONArray("weather").getJSONObject(0).getString("description");
-                    String cityID = dayObject.getJSONObject("sys").getString("id");
+                    String cityID = dayObject.getString("id");
 
                     Forecast dayForecast = new Forecast(cityName, humidity, pressure, icon, currentTemp, maxTemp, minTemp, description, cityID);
                     dayForecasts.add(dayForecast);
                 }
             }
+            response.body().close();
         } catch(IOException e){
             e.printStackTrace();
         } catch (JSONException e) {
@@ -118,7 +119,6 @@ public class weatherApiService {
                 String maxTemp = dayObject.getJSONObject("main").getString("temp_max");
                 String description = dayObject.getJSONArray("weather").getJSONObject(0).getString("description");
                 String cityID = dayObject.getJSONObject("sys").getString("id");
-
                 Forecast dayForecast = new Forecast(cityName, humidity, pressure, icon, currentTemp, maxTemp, minTemp, description, cityID);
                 dayForecasts.add(dayForecast);
             }

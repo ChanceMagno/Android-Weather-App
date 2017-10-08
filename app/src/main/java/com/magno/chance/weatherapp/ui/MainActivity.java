@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import android.widget.SearchView;
@@ -41,9 +41,10 @@ import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
+import butterknife.BindDrawable;
+import butterknife.BindFloat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
@@ -51,7 +52,6 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
-    private Button mButton;
     private FusedLocationProviderClient mFusedLocationClient;
     private GoogleApiClient googleApiClient;
     private static final int PERMISSION_ACCESS_COARSE_LOCATION = 1;
@@ -62,9 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private WeatherListAdapter mAdapter;
 
     @BindView(R.id.mainRecyclerView) RecyclerView mRecyclerView;
-
-
-
+    @BindView(R.id.locationFloatingActionButton) FloatingActionButton mLocationButton;
 
 
     @Override
@@ -72,10 +70,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        mButton = findViewById(R.id.button);
-        mButton.setOnClickListener(this);
+
         mDatabaseRef = FirebaseDatabase.getInstance().getReference(Constants.DATABASE_REF_WEATHER).child(Constants.DATABASE_REF_CITYCODES);
+        mLocationButton.setOnClickListener(this);
         googleApiClient = new GoogleApiClient.Builder(this, this, this).addApi(LocationServices.API).build();
+
         getSavedCityCodes();
     }
 
@@ -83,8 +82,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDatabaseRef.addListenerForSingleValueEvent(mListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                cityCodes = new ArrayList<String>();
                 if(dataSnapshot.exists()){
-                    cityCodes = (ArrayList<String>) dataSnapshot.getValue();
+                    for (DataSnapshot child: dataSnapshot.getChildren()){
+                        cityCodes.add(child.getValue(String.class));
+                    }
                     getSavedForecasts(cityCodes);
                 }
             }
@@ -170,6 +172,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
+    public void goToWeatherDetail(ArrayList<Forecast> mForecasts){
+        Intent intent = new Intent(MainActivity.this, WeatherDetail.class);
+        intent.putExtra("forecast", Parcels.wrap(mDayForecast.get(0)));
+        startActivity(intent);
+    }
+
 
     public void getCoordinates(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -207,11 +215,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         if(response.code() == 200){
-                            cityCodes.add(mDayForecast.get(0).getCityID());
-                            mDatabaseRef.setValue(cityCodes);
-                            Intent intent = new Intent(MainActivity.this, WeatherDetail.class);
-                            intent.putExtra("forecast", Parcels.wrap(mDayForecast.get(0)));
-                            startActivity(intent);
+                            // TODO: 10/8/17 fix city id's
+//                            cityCodes.add(mDayForecast.get(0).getCityID());
+//                            mDatabaseRef.setValue(cityCodes);
+                            goToWeatherDetail(mDayForecast);
                         } else {
                             showToast("Unable to retrieve forecast for " + zipcode);
                         }
@@ -228,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onFailure(Call call, IOException e) {
                     showToast("Failed to retrieve forcast(s)");
+
             }
 
             @Override
@@ -237,12 +245,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         @Override
                         public void run() {
-                            mAdapter = new WeatherListAdapter(getApplicationContext(), mDayForecast);
-                            mRecyclerView.setAdapter(mAdapter);
-                            RecyclerView.LayoutManager layoutManager =
-                                    new LinearLayoutManager(MainActivity.this);
-                            mRecyclerView.setLayoutManager(layoutManager);
-                            mRecyclerView.setHasFixedSize(true);                        }
+                            if(response.code() == 200) {
+                                mAdapter = new WeatherListAdapter(getApplicationContext(), mDayForecast);
+                                mRecyclerView.setAdapter(mAdapter);
+                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+                                mRecyclerView.setLayoutManager(layoutManager);
+                                mRecyclerView.setHasFixedSize(true);
+                            } else {
+                                showToast("unable to retrieve forecast");
+                            }
+                        }
                     });
 
                 }
@@ -266,11 +278,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         if(response.code() == 200){
-                            cityCodes.add(mDayForecast.get(0).getCityID());
-                            mDatabaseRef.setValue(cityCodes);
-                            Intent intent = new Intent(MainActivity.this, WeatherDetail.class);
-                            intent.putExtra("forecast", Parcels.wrap(mDayForecast.get(0)));
-                            startActivity(intent);
+                            // TODO: 10/8/17 fix city id saving
+//                            cityCodes.add(mDayForecast.get(0).getCityID());
+//                            mDatabaseRef.setValue(cityCodes);
+                            goToWeatherDetail(mDayForecast);
                         } else {
                             showToast("Unable to retrieve forecast for your current location");
                         }

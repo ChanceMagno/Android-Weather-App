@@ -9,7 +9,7 @@
 
 
     <TextView
-        android:id="@+id/cityNameTextView"
+        android:id="@+id/nameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -33,7 +33,7 @@
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@+id/cityNameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/nameTextView"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent" />
 
@@ -147,7 +147,7 @@
         android:layout_marginTop="32dp"
         android:text="Low"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorDarkBlue"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 public class WeatherDetail extends AppCompatActivity {
     private Forecast mForecast;
 
-    @BindView(R.id.cityNameTextView) TextView mCityNameTextView;
+    @BindView(R.id.nameTextView) TextView mCityNameTextView;
     @BindView(R.id.iconImageView) ImageView mIconImageView;
     @BindView(R.id.currentTempTextView) TextView mCurrentTempTextView;
     @BindView(R.id.pressureTextView) TextView mPressureTextView;

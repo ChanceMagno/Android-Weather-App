@@ -14,6 +14,7 @@ public class Constants {
     public static final String API_LAT_QUERY_PARAMETER = "lat";
     public static final String API_LON_QUERY_PARAMETER = "lon";
 
+    public static final String  WEATHER_ICON_BASE_URL = "http://openweathermap.org/img/w/";
     public static final String  WEATHER_PNG_THUNDER = "://publicdomainvectors.org/photos/yves_guillou_orage.png";
     public static final String  WEATHER_PNG_CLEAR_SKY = "https://publicdomainvectors.org/photos/Anonymous_simple_weather_symbols_1.png";
     public static final String  WEATHER_PNG_SHOWERS_RAIN = "https://publicdomainvectors.org/photos/Anonymous_simple_weather_symbols_6.png";

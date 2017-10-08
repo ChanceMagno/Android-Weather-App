@@ -44,8 +44,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton;
     private FusedLocationProviderClient mFusedLocationClient;
     private GoogleApiClient googleApiClient;
-    private SharedPreferences mSharedPreferences;
-    private SharedPreferences.Editor mEditor;
     private static final int PERMISSION_ACCESS_COARSE_LOCATION = 1;
     public ArrayList<Forecast> mDayForecast;
 
@@ -58,8 +56,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton.setOnClickListener(this);
         googleApiClient = new GoogleApiClient.Builder(this, this, this).addApi(LocationServices.API).build();
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mEditor = mSharedPreferences.edit();
     }
 
     @Override

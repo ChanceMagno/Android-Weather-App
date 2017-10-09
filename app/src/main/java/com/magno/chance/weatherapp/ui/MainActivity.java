@@ -77,6 +77,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDatabaseRef = FirebaseDatabase.getInstance().getReference(Constants.DATABASE_REF_WEATHER).child(Constants.DATABASE_REF_CITYCODES);
         mLocationButton.setOnClickListener(this);
         googleApiClient = new GoogleApiClient.Builder(this, this, this).addApi(LocationServices.API).build();
+        cityCodes.add("3496831");
+        cityCodes.add("1280737");
+        cityCodes.add("523523");
+        cityCodes.add("1280737");
+        cityCodes.add("2267057");
+        cityCodes.add("1280737");
+        mDatabaseRef.setValue(cityCodes);
+
+
 
         getSavedCityCodes();
     }
@@ -257,7 +266,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
                                 ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
                                 touchHelper.attachToRecyclerView(mRecyclerView);
-
                             } else {
                                 showToast("unable to retrieve forecast");
                             }

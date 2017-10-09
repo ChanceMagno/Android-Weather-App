@@ -1,10 +1,7 @@
 package com.magno.chance.weatherapp.service;
 
 
-
-
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.magno.chance.weatherapp.Constants;
 import com.magno.chance.weatherapp.models.Forecast;
@@ -12,8 +9,10 @@ import com.magno.chance.weatherapp.models.Forecast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;

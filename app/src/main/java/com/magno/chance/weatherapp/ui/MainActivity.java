@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MenuItem item = menu.findItem(R.id.menuSearch);
         SearchView searchView = (SearchView)item.getActionView();
         searchView.setInputType(InputType.TYPE_CLASS_NUMBER);
+        searchView.setQueryHint("Zipcode");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

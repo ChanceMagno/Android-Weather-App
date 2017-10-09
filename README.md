@@ -23,6 +23,7 @@ Get Current weather via zipcode or your current location.
 * In Android Studio:
   * At the top click 'Run' and select Run App.
   * Choose an emulator with google play services installed.
+  * If this is a new emulator you may need to send a last location => easiest way is to simply open google maps.
   * The android emulator should start up with WeatherAPP.
 
 ### Technologies used

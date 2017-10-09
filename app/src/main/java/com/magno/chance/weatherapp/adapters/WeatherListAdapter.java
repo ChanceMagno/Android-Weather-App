@@ -117,13 +117,35 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
         }
 
         public void bindForecasts(Forecast forecast) {
-
-            String iconUrl = Constants.WEATHER_ICON_BASE_URL + forecast.getIcon() + ".png";
             String currentTemp = (forecast.getCurrentTemp() + (char) 0x00B0);
             mCityNameTextView.setText(forecast.getCityName());
             mCurrentTempTextView.setText(currentTemp);
-            Picasso.with(mContext).load(iconUrl).into(mIconImageView);
+            Picasso.with(mContext).load(getIcon(forecast.getIcon())).into(mIconImageView);
         }
+
+        public String getIcon(String icon){
+            if(icon.contains("01")){
+                return Constants.WEATHER_PNG_CLEAR_SKY;
+            } else if(icon.contains("02")){
+                return Constants.WEATHER_PNG_FEW_CLOUDS;
+            } else if (icon.contains("03")){
+                return Constants.WEATHER_PNG_SCATTERED_CLOUDS;
+            } else if (icon.contains("04")){
+                return Constants.WEATHER_PNG_BROKEN_CLOUDS;
+            } else if (icon.contains("09")){
+                return Constants.WEATHER_PNG_SHOWERS_RAIN;
+            } else if (icon.contains("10")) {
+                return Constants.WEATHER_PNG_RAIN;
+            } else if (icon.contains("11")){
+                return Constants.WEATHER_PNG_THUNDER;
+            } else if (icon.contains("13")){
+                return Constants.WEATHER_PNG_SNOW;
+            } else if (icon.contains("50")){
+                return Constants.WEATHER_PNG_MIST;
+            }
+            return Constants.WEATHER_UNKNOWN;
+        }
+
     }
 
 

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import android.widget.SearchView;
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     @BindView(R.id.mainRecyclerView) RecyclerView mRecyclerView;
-    @BindView(R.id.locationFloatingActionButton) FloatingActionButton mLocationButton;
+    @BindView(R.id.locationButton) Button mLocationButton;
 
 
     @Override
@@ -77,24 +77,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDatabaseRef = FirebaseDatabase.getInstance().getReference(Constants.DATABASE_REF_WEATHER).child(Constants.DATABASE_REF_CITYCODES);
         mLocationButton.setOnClickListener(this);
         googleApiClient = new GoogleApiClient.Builder(this, this, this).addApi(LocationServices.API).build();
-        cityCodes.add("3496831");
-        cityCodes.add("1280737");
-        cityCodes.add("523523");
-        cityCodes.add("1280737");
-        cityCodes.add("2267057");
-        cityCodes.add("1280737");
-        mDatabaseRef.setValue(cityCodes);
-
-
-
         getSavedCityCodes();
     }
+
 
     public void getSavedCityCodes(){
         mDatabaseRef.addListenerForSingleValueEvent(mListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                cityCodes = new ArrayList<String>();
+                cityCodes = new ArrayList<>();
                 if(dataSnapshot.exists()){
                     for (DataSnapshot child: dataSnapshot.getChildren()){
                         cityCodes.add(child.getValue(String.class));
@@ -231,7 +222,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             // TODO: 10/8/17 fix city id's
 //                            cityCodes.add(mDayForecast.get(0).getCityID());
 //                            mDatabaseRef.setValue(cityCodes);
-                            goToWeatherDetail(mDayForecast);
+//                            goToWeatherDetail(mDayForecast);
+                            Log.i("done", "api");
                         } else {
                             showToast("Unable to retrieve forecast for " + zipcode);
                         }
@@ -259,14 +251,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void run() {
                             if(response.code() == 200) {
-                                mAdapter = new WeatherListAdapter(getApplicationContext(), mDayForecast, cityCodes, mDatabaseRef);
-                                mRecyclerView.setAdapter(mAdapter);
-                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-                                mRecyclerView.setLayoutManager(layoutManager);
-                                mRecyclerView.setHasFixedSize(true);
-                                ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
-                                ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-                                touchHelper.attachToRecyclerView(mRecyclerView);
+                                fillRecyclerView();
                             } else {
                                 showToast("unable to retrieve forecast");
                             }
@@ -276,6 +261,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
+    }
+
+    public void fillRecyclerView(){
+        mAdapter = new WeatherListAdapter(getApplicationContext(), mDayForecast, cityCodes, mDatabaseRef);
+        mRecyclerView.setAdapter(mAdapter);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(mRecyclerView);
     }
 
     public void getLocalForecast(String lat, String lon){

@@ -144,7 +144,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="Low"
         android:textAlignment="center"
         android:textColor="@color/colorDarkBlue"
@@ -152,7 +152,8 @@
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="@+id/pressureTextView"
-        app:layout_constraintTop_toBottomOf="@+id/pressureImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/pressureImageView"
+        app:layout_constraintHorizontal_bias="0.505" />
 
     <TextView
         android:id="@+id/textView10"
@@ -160,7 +161,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="31dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="High"
         android:textAlignment="center"
         android:textColor="@android:color/holo_red_dark"
@@ -168,7 +169,8 @@
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="@+id/humidityTextView5"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintHorizontal_bias="0.506" />
 
     <TextView
         android:id="@+id/lowTempTextView"

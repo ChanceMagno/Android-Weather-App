@@ -12,9 +12,9 @@ Get Current weather via zipcode or your current location.
 * Android Studio
 
 * If using an emulator you must pick one with google play services installed(Emulators will have a briefcase checkmark icon) like shown here:
-https://i.stack.imgur.com/DtJ7O.png
+![https://i.stack.imgur.com/DtJ7O.png]()
 * In some instances running the emulator you may have to manually upgrade google play services on the emulator itself in the menu shown here:
-https://i.stack.imgur.com/lEUtj.png
+![https://i.stack.imgur.com/lEUtj.png]()
 
 
 ### Installing
@@ -37,8 +37,8 @@ https://i.stack.imgur.com/lEUtj.png
 
 ## Built With
 
-* Android Studio(https://developer.android.com/studio/index.html?gclid=Cj0KCQjwja_JBRD8ARIsAHitdbkoCPLgHA81iZRvZjBESFzO7dAxUiMht7PnrSr16MZMeSn6j1_nNXIaAnkFEALw_wcB) - The framework used
-* [Java](https://www.java.com/en/) - Dependency Management
+* AndroidStudio(https://developer.android.com/studio/index.html?gclid=Cj0KCQjwja_JBRD8ARIsAHitdbkoCPLgHA81iZRvZjBESFzO7dAxUiMht7PnrSr16MZMeSn6j1_nNXIaAnkFEALw_wcB) 
+
 
 ## Version
 

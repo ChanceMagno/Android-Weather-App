@@ -23,23 +23,6 @@ import okhttp3.Response;
 
 public class weatherApiService {
 
-
-    public static void getForecastFromZip(String location, Callback callback) {
-        OkHttpClient client = new OkHttpClient.Builder().build();
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(Constants.API_BASE_URL).newBuilder();
-        urlBuilder.addQueryParameter(Constants.YOUR_QUERY_PARAMETER, location);
-        urlBuilder.addQueryParameter(Constants.API_UNITS, Constants.API_UNITS_FORMAT);
-        urlBuilder.addQueryParameter(Constants.API_KEY_QUERY_PARAMETER, Constants.API_KEY);
-        String url = urlBuilder.build().toString();
-        Log.i("URL", url);
-        Request request= new Request.Builder()
-                .url(url)
-                .build();
-
-        Call call = client.newCall(request);
-        call.enqueue(callback);
-    }
-
     public static void getForecastFromCoords(String latitude, String longitude, Callback callback) {
         OkHttpClient client = new OkHttpClient.Builder().build();
         HttpUrl.Builder urlBuilder = HttpUrl.parse(Constants.API_BASE_URL).newBuilder();
@@ -121,7 +104,6 @@ public class weatherApiService {
                 String maxTemp = dayObject.getJSONObject("main").getString("temp_max");
                 String description = dayObject.getJSONArray("weather").getJSONObject(0).getString("description");
                 String cityID = dayObject.getString("id");
-                Log.i("CIDYID", cityID);
                 Forecast dayForecast = new Forecast(cityName, humidity, pressure, icon, currentTemp, maxTemp, minTemp, description, cityID);
                 dayForecasts.add(dayForecast);
             }

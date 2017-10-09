@@ -3,8 +3,9 @@ package com.magno.chance.weatherapp.ui;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
-import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -44,7 +45,7 @@ import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.List;
 
 
 import butterknife.BindView;
@@ -114,7 +115,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                getForecastWithZip(query);
+//                getForecastWithZip(query);
+                convertToCoords(query);
                 return false;
             }
 
@@ -195,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (location != null) {
                         double lat = location.getLatitude();
                         double lng = location.getLongitude();
-                        getLocalForecast(String.valueOf(lat), String.valueOf(lng));
+                        getForecastWithCoords(String.valueOf(lat), String.valueOf(lng));
                     } else {
                         showToast("Unable to retrieve current location");
                     }
@@ -204,51 +206,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void getForecastWithZip(final String zipcode){
-        weatherApiService.getForecastFromZip(zipcode, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                    showToast(call.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, final Response response) throws IOException {
-
-                mDayForecast = weatherApiService.processResults(response);
-                MainActivity.this.runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        if(response.code() == 200){
-                            if (mDayForecast.get(0).getCityID().equals("0")){
-                                Log.i("BAD DATA", "City Id incorrect");
-                                showToast("unable to save city");
-                            } else if(cityCodes.size() == 19){
-                                showToast("Please delete a city to save another, max allowed :20");
-                            } else {
-                                cityCodes.add(mDayForecast.get(0).getCityID());
-                                mDatabaseRef.setValue(cityCodes);
-                            }
-                            goToWeatherDetail(mDayForecast);
-                        } else {
-                            showToast("Unable to retrieve forecast for " + zipcode);
-                        }
-                    }
-                });
-
-            }
-
-        });
-    }
-
     public void getSavedForecasts(ArrayList<String> savedForcast){
         weatherApiService.getSavedForecasts(savedForcast, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                     showToast("Failed to retrieve forcast(s)");
-
             }
-
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 mDayForecast = weatherApiService.processListResults(response); {
@@ -280,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         touchHelper.attachToRecyclerView(mRecyclerView);
     }
 
-    public void getLocalForecast(String lat, String lon){
+    public void getForecastWithCoords(String lat, String lon){
         weatherApiService.getForecastFromCoords(lat, lon, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -314,6 +277,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+    }
+
+    public void convertToCoords(String zipCode){
+        final Geocoder geocoder = new Geocoder(this);
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(zipCode, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                       getForecastWithCoords(String.valueOf(address.getLatitude()), String.valueOf(address.getLongitude()));
+            } else {
+                showToast("Unable to find zipcode");
+            }
+        } catch (IOException e) {
+            Log.i("Exception", e.toString());
+        }
     }
 
 

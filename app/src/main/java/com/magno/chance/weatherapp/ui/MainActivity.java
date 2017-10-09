@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -219,11 +220,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         if(response.code() == 200){
-                            // TODO: 10/8/17 fix city id's
-//                            cityCodes.add(mDayForecast.get(0).getCityID());
-//                            mDatabaseRef.setValue(cityCodes);
-//                            goToWeatherDetail(mDayForecast);
-                            Log.i("done", "api");
+                            if (mDayForecast.get(0).getCityID().equals("0")){
+                                Log.i("BAD DATA", "City Id incorrect");
+                                showToast("unable to save city");
+                            } else if(cityCodes.size() == 19){
+                                showToast("Please delete a city to save another, max allowed :20");
+                            } else {
+                                cityCodes.add(mDayForecast.get(0).getCityID());
+                                mDatabaseRef.setValue(cityCodes);
+                            }
+                            goToWeatherDetail(mDayForecast);
                         } else {
                             showToast("Unable to retrieve forecast for " + zipcode);
                         }
@@ -290,9 +296,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         if(response.code() == 200){
-                            // TODO: 10/8/17 fix city id saving
-//                            cityCodes.add(mDayForecast.get(0).getCityID());
-//                            mDatabaseRef.setValue(cityCodes);
+                            if (mDayForecast.get(0).getCityID().equals("0")){
+                                Log.i("BAD DATA", "City Id incorrect");
+                                showToast("unable to save city");
+                            } else if(cityCodes.size() == 19){
+                                showToast("Please delete a city to save another, max allowed :20");
+                            } else {
+                                cityCodes.add(mDayForecast.get(0).getCityID());
+                                mDatabaseRef.setValue(cityCodes);
+                            }
                             goToWeatherDetail(mDayForecast);
                         } else {
                             showToast("Unable to retrieve forecast for your current location");

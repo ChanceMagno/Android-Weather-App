@@ -9,35 +9,34 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/mainRecyclerView"
-        android:layout_width="354dp"
-        android:layout_height="433dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="4dp"
-        app:layout_constraintHorizontal_bias="0.5"
-        tools:layout_editor_absoluteX="12dp" />
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/locationButton" />
 
     <Button
         android:id="@+id/locationButton"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
         android:background="@color/colorDarkBlue"
         android:fontFamily="sans-serif-smallcaps"
         android:text="Get Local Weather"
         android:textColor="@color/cardview_light_background"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainRecyclerView">
-    </Button>
+        app:layout_constraintRight_toRightOf="parent"></Button>
 
 
 

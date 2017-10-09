@@ -4,6 +4,7 @@ package com.magno.chance.weatherapp.service;
 
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.magno.chance.weatherapp.Constants;
 import com.magno.chance.weatherapp.models.Forecast;
@@ -30,6 +31,7 @@ public class weatherApiService {
         urlBuilder.addQueryParameter(Constants.API_UNITS, Constants.API_UNITS_FORMAT);
         urlBuilder.addQueryParameter(Constants.API_KEY_QUERY_PARAMETER, Constants.API_KEY);
         String url = urlBuilder.build().toString();
+        Log.i("URL", url);
         Request request= new Request.Builder()
                 .url(url)
                 .build();
@@ -118,7 +120,8 @@ public class weatherApiService {
                 String minTemp = dayObject.getJSONObject("main").getString("temp_min");
                 String maxTemp = dayObject.getJSONObject("main").getString("temp_max");
                 String description = dayObject.getJSONArray("weather").getJSONObject(0).getString("description");
-                String cityID = dayObject.getJSONObject("sys").getString("id");
+                String cityID = dayObject.getString("id");
+                Log.i("CIDYID", cityID);
                 Forecast dayForecast = new Forecast(cityName, humidity, pressure, icon, currentTemp, maxTemp, minTemp, description, cityID);
                 dayForecasts.add(dayForecast);
             }

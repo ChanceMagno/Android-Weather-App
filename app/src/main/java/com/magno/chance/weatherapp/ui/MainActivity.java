@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -36,6 +37,7 @@ import com.magno.chance.weatherapp.R;
 import com.magno.chance.weatherapp.adapters.WeatherListAdapter;
 import com.magno.chance.weatherapp.models.Forecast;
 import com.magno.chance.weatherapp.service.weatherApiService;
+import com.magno.chance.weatherapp.util.SimpleItemTouchHelperCallback;
 
 import org.parceler.Parcels;
 
@@ -43,8 +45,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-import butterknife.BindDrawable;
-import butterknife.BindFloat;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ValueEventListener mListener;
     private WeatherListAdapter mAdapter;
 
+
     @BindView(R.id.mainRecyclerView) RecyclerView mRecyclerView;
     @BindView(R.id.locationFloatingActionButton) FloatingActionButton mLocationButton;
 
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference(Constants.DATABASE_REF_WEATHER).child(Constants.DATABASE_REF_CITYCODES);
         mLocationButton.setOnClickListener(this);
@@ -246,11 +249,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void run() {
                             if(response.code() == 200) {
-                                mAdapter = new WeatherListAdapter(getApplicationContext(), mDayForecast);
+                                mAdapter = new WeatherListAdapter(getApplicationContext(), mDayForecast, cityCodes, mDatabaseRef);
                                 mRecyclerView.setAdapter(mAdapter);
                                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
                                 mRecyclerView.setLayoutManager(layoutManager);
                                 mRecyclerView.setHasFixedSize(true);
+                                ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
+                                ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+                                touchHelper.attachToRecyclerView(mRecyclerView);
+
                             } else {
                                 showToast("unable to retrieve forecast");
                             }
@@ -307,6 +314,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (googleApiClient != null) {
             googleApiClient.connect();
         }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
     }
 
     @Override

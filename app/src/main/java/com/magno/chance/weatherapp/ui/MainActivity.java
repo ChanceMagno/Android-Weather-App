@@ -44,7 +44,11 @@ import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
@@ -113,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                getForecastWithZip(query);
                 convertToCoords(query);
                 return false;
             }
@@ -264,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 showToast("Please delete a city to save another, max allowed :20");
                             } else {
                                 cityCodes.add(mDayForecast.get(0).getCityID());
-                                mDatabaseRef.setValue(cityCodes);
+                                mDatabaseRef.setValue(checkForDuplicates());
                             }
                             goToWeatherDetail(mDayForecast);
                         } else {
@@ -275,6 +279,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+    }
+
+   public List<String> checkForDuplicates(){
+       List<String> newList = new ArrayList<String>(new HashSet<String>(cityCodes));
+       return newList;
     }
 
     public void convertToCoords(String zipCode){
